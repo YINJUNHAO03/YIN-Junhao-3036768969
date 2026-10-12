@@ -19,7 +19,9 @@ and extends the analysis with an independent, county-level difference-in-differe
 ├── code/
 │   ├── 01_replicate_main.py   # replicates Tables 2-4 and Figure 1
 │   ├── 02_extension_qcew.py   # QCEW county-level DiD extension
-│   └── run_all.py             # runs everything
+│   ├── run_all.py             # runs everything
+│   ├── card_krueger_1994_reproduction.ipynb   # supplementary walkthrough notebook
+│   └── card_krueger_qcew_extension.ipynb      # supplementary walkthrough notebook
 ├── skills/
 │   └── card-krueger-replication/SKILL.md
 ├── data/
@@ -29,6 +31,8 @@ and extends the analysis with an independent, county-level difference-in-differe
     ├── tables/                # generated CSV tables
     └── figures/               # generated PNG figures
 ```
+
+> The `.py` files are the canonical reproducible code. The two `.ipynb` notebooks are supplementary working documents that walk through the analysis step by step (with intermediate outputs); they are not part of the automated `run_all.py` workflow.
 
 ## How to reproduce
 
@@ -56,7 +60,7 @@ python code/run_all.py
 
 This generates:
 
-- `results/tables/table2_means.csv` — Table 2 (variable means by state)
+- `results/tables/table2_chain.csv`, `table2_wave1.csv`, `table2_wave2.csv` — Table 2 (store-type distribution + variable means by state, waves 1 and 2)
 - `results/tables/table3_employment.csv` — Table 3 (average FTE employment, DiD)
 - `results/tables/table4_regressions.csv` — Table 4 (reduced-form regressions)
 - `results/figures/figure1_wage_distribution.png` — Figure 1 (starting-wage distributions)

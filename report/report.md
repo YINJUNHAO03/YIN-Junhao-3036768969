@@ -67,7 +67,7 @@ The two states were comparable before the increase (FTE 20.44 in NJ vs 23.33 in 
 | FTE after (all available) | 21.17 | 21.03 | −0.14 |
 | **Change in mean FTE** | **−2.17** | **+0.59** | **+2.75** |
 
-The headline DiD is **+2.75 FTE employees** (t ≈ 2.05), matching the paper's reported 2.76 (the small difference is rounding). Employment in NJ *rose* relative to PA — the opposite of the competitive prediction. The balanced-sample change (+2.75) and the specification treating temporarily-closed stores as zero (+2.51) are also reproduced exactly.
+The headline DiD is **+2.75 FTE employees** (t ≈ 2.03), matching the paper's reported 2.76 (the small difference is rounding). Employment in NJ *rose* relative to PA — the opposite of the competitive prediction. The balanced-sample change (+2.75) and the specification treating temporarily-closed stores as zero (+2.51) are also reproduced exactly.
 
 ### Table 4 — reduced-form regressions
 
@@ -85,7 +85,7 @@ All coefficients, standard errors, and the sample size (n = 357) match exactly. 
 
 The figure reproduces the paper's Figure 1: wave-1 wage distributions are nearly identical across the two states, while wave-2 NJ wages shift right and mass at $5.05, with PA unchanged.
 
-**Discrepancies found.** Three minor discrepancies were identified and are reported transparently: (i) the row-3 (unbalanced) NJ standard error is 0.48 in our matched-pairs calculation versus the paper's 0.54, so our t-statistic is ≈ 2.05 versus the paper's ≈ 2.03; (ii) the unbalanced PA change is −2.17 (the raw change is −2.16558), while the paper prints −2.16; (iii) the paper reports the DiD as 2.76, while the direct computation gives 2.75 (rounding). None of these affects any conclusion.
+**Discrepancies found.** Two minor rounding discrepancies were identified and are reported transparently: (i) the unbalanced PA change is −2.17 (the raw change is −2.16558), while the paper prints −2.16; (ii) the paper reports the DiD as 2.76, while the direct computation gives 2.75 (rounding). The row-3 (unbalanced) standard errors are computed with the two-correlated-means formula (r = 0.45), reproducing the paper's NJ 0.54 and DiD 1.36. Neither affects any conclusion.
 
 ## 5. Independent extension
 

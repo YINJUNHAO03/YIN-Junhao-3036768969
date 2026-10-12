@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-02_extension_qcew.py — 独立扩展：用 BLS QCEW 官方数据做县层面 DiD。
+02_extension_qcew.py — independent extension: a county-level DiD using BLS QCEW
+official data.
 
-思路：把 Card-Krueger(1994) 的门店级电话调查，换成 BLS 的行政工资记录(QCEW/ES-202)
-的县级汇总，检验 1992 年 4 月 NJ 最低工资上调是否导致 NJ 县"餐饮业"(SIC 58)就业
-相对 PA 县下降。
+Idea: replace the Card-Krueger (1994) store-level phone survey with county-level
+aggregates from the BLS administrative wage records (QCEW/ES-202), and test
+whether the April 1992 NJ minimum-wage increase reduced employment in NJ counties'
+"eating & drinking places" (SIC 58) relative to PA counties.
 
-输入：data/raw/sic_1992_qtrly_by_area.zip（BLS QCEW，SIC 分类 1975-2000）
-输出：results/tables/extension_did.csv、results/figures/extension_employment_change.png
-运行：python code/02_extension_qcew.py
+Input : data/raw/sic_1992_qtrly_by_area.zip (BLS QCEW, SIC classification 1975-2000)
+Output: results/tables/extension_did.csv, extension_robustness.csv
+        results/figures/extension_employment_change.png
+Run   : python code/02_extension_qcew.py
 """
 from pathlib import Path
 import zipfile, io, re
@@ -26,7 +29,8 @@ OUT_TAB.mkdir(parents=True, exist_ok=True)
 OUT_FIG.mkdir(parents=True, exist_ok=True)
 
 ZIP = RAW / "sic_1992_qtrly_by_area.zip"
-# 稳健性检验：Card & Krueger (1994) 电话调查覆盖的 7 个东部 PA 县，作为更可比的对照组
+# Robustness check: the 7 eastern PA counties covered by the Card & Krueger (1994)
+# phone survey, used as a more comparable control group.
 EAST_PA_FIPS = {"42017", "42029", "42069", "42077", "42079", "42091", "42095"}
 KEEP_COLS = ["own_code", "industry_code", "agglvl_code", "year", "qtr",
              "disclosure_code", "qtrly_estabs_count",
@@ -35,7 +39,7 @@ KEEP_COLS = ["own_code", "industry_code", "agglvl_code", "year", "qtr",
 
 
 def load_county_files():
-    """从 zip 里定位 NJ(34xxx)/PA(42xxx) 的县文件。"""
+    """Locate NJ (34xxx) / PA (42xxx) county files inside the zip."""
     with zipfile.ZipFile(ZIP) as z:
         all_names = [n for n in z.namelist() if n.endswith(".csv")]
     county = []
@@ -50,7 +54,8 @@ def load_county_files():
 
 
 def build_panel(county_files):
-    """读入并筛选：餐饮业(SIC 58/581/5810) × 私营(own_code=5) 的县×季度面板。"""
+    """Read and filter: eating & drinking places (SIC 58/581/5810) x private
+    (own_code = 5), into a county x quarter panel."""
     frames = []
     with zipfile.ZipFile(ZIP) as z:
         for fips, name in county_files:
@@ -71,11 +76,11 @@ def build_panel(county_files):
 
 
 def build_did(df):
-    """构造县层面 DiD：before=2月+3月，after=11月+12月，dlog=对数变化。"""
+    """Build the county-level DiD: before = Feb+Mar, after = Nov+Dec, dlog = log change."""
     q1 = df[df["qtr"] == 1].set_index("fips")
     q4 = df[df["qtr"] == 4].set_index("fips")
-    before = (q1["month2_emplvl"] + q1["month3_emplvl"]) / 2.0   # 2月+3月
-    after = (q4["month2_emplvl"] + q4["month3_emplvl"]) / 2.0    # 11月+12月
+    before = (q1["month2_emplvl"] + q1["month3_emplvl"]) / 2.0   # Feb + Mar
+    after = (q4["month2_emplvl"] + q4["month3_emplvl"]) / 2.0    # Nov + Dec
     d = pd.DataFrame({"state": q1["state"], "before": before, "after": after}).dropna()
     d["dlog"] = np.log(d["after"]) - np.log(d["before"])
     d["nj"] = (d["state"] == "34").astype(int)
@@ -83,10 +88,11 @@ def build_did(df):
 
 
 def _wide(df, outcome, full_quarter):
-    """把 县×季度 面板转成 县级 before/after 对数变化。
+    """Turn the county x quarter panel into county-level before/after log changes.
 
-    outcome: "employment"(就业) 或 "establishments"(机构数)。
-    full_quarter: True 用全季度(1+2+3月 / 10+11+12月)，False 用 2-3月 / 11-12月。
+    outcome: "employment" or "establishments".
+    full_quarter: True uses the full quarter (months 1+2+3 / 10+11+12),
+                  False uses months 2-3 / 11-12.
     """
     q1 = df[df["qtr"] == 1].set_index("fips")
     q4 = df[df["qtr"] == 4].set_index("fips")
@@ -97,7 +103,7 @@ def _wide(df, outcome, full_quarter):
         else:
             before = (q1["month2_emplvl"] + q1["month3_emplvl"]) / 2.0
             after = (q4["month2_emplvl"] + q4["month3_emplvl"]) / 2.0
-    else:  # establishments（机构数本身就是季度值）
+    else:  # establishments (the count is already a quarterly value)
         before = q1["qtrly_estabs_count"]
         after = q4["qtrly_estabs_count"]
     d = pd.DataFrame({"fips": q1.index, "state": q1["state"],
@@ -108,46 +114,47 @@ def _wide(df, outcome, full_quarter):
 
 
 def _did(d):
-    """对县级数据跑 DiD 回归，返回 (系数, 标准误, t, p, n)。"""
+    """Run the county-level DiD regression, return (coef, SE, t, p, n)."""
     X = sm.add_constant(d[["nj"]])
     fit = sm.OLS(d["dlog"], X).fit()
     return fit.params["nj"], fit.bse["nj"], fit.tvalues["nj"], fit.pvalues["nj"], int(fit.nobs)
 
 
 def robustness(df):
-    """稳健性检验：换对照组 / 换窗口 / 换结果变量。"""
+    """Robustness checks: alternative control group / window / outcome."""
     rows = []
     d = _wide(df, "employment", full_quarter=False)
-    rows.append(("1. 主设定：就业 2-3月 vs 11-12月，全 PA", *_did(d)))
+    rows.append(("1. Main: employment Feb-Mar vs Nov-Dec, all PA", *_did(d)))
 
     d2 = d[d["fips"].str[:2].eq("34") | d["fips"].isin(EAST_PA_FIPS)].copy()
-    rows.append(("2. 对照组换成东部 PA（7 县）", *_did(d2)))
+    rows.append(("2. Control = eastern PA (7 counties)", *_did(d2)))
 
     d3 = _wide(df, "employment", full_quarter=True)
-    rows.append(("3. 全季度窗口 Q1 vs Q4", *_did(d3)))
+    rows.append(("3. Full-quarter window Q1 vs Q4", *_did(d3)))
 
     d4 = _wide(df, "establishments", full_quarter=False)
-    rows.append(("4. 结果变量换成机构数", *_did(d4)))
+    rows.append(("4. Outcome = establishments", *_did(d4)))
 
-    return pd.DataFrame(rows, columns=["稳健性检验", "DiD系数", "标准误", "t值", "p值", "样本量"])
+    return pd.DataFrame(rows, columns=["Specification", "DiD coefficient", "SE", "t", "p", "N"])
 
 
 def main():
     county_files = load_county_files()
-    print(f"县文件：NJ {sum(1 for f,_ in county_files if f.startswith('34'))} 个，"
-          f"PA {sum(1 for f,_ in county_files if f.startswith('42'))} 个")
+    print(f"County files: NJ {sum(1 for f, _ in county_files if f.startswith('34'))}, "
+          f"PA {sum(1 for f, _ in county_files if f.startswith('42'))}")
 
     df = build_panel(county_files)
     d = build_did(df)
-    print(f"县层面样本：{len(d)} 个县（NJ {int(d.nj.sum())}，PA {int((1-d.nj).sum())}）")
+    print(f"County-level sample: {len(d)} counties (NJ {int(d.nj.sum())}, "
+          f"PA {int((1 - d.nj).sum())})")
 
-    # 保存处理后的县层面面板
+    # Save the processed county-level panel
     PROC = Path("data/processed")
     PROC.mkdir(parents=True, exist_ok=True)
     d.to_csv(PROC / "qcew_county_panel.csv")
-    print("处理后数据已保存 →", PROC / "qcew_county_panel.csv")
+    print("Processed data saved ->", PROC / "qcew_county_panel.csv")
 
-    # DiD 均值表
+    # DiD means table
     dlog_nj = d.loc[d.nj == 1, "dlog"].mean()
     dlog_pa = d.loc[d.nj == 0, "dlog"].mean()
     did = dlog_nj - dlog_pa
@@ -162,14 +169,14 @@ def main():
     }, index=["Pennsylvania", "New Jersey"])
     tab.loc["DiD (NJ-PA)"] = [None, None, did]
     tab.to_csv(OUT_TAB / "extension_did.csv")
-    print("\nDiD 均值表已保存 →", OUT_TAB / "extension_did.csv")
+    print("\nDiD means table saved ->", OUT_TAB / "extension_did.csv")
     print(tab.round(4))
 
-    print(f"\nDiD 回归：dlog ~ NJ")
-    print(f"  系数={fit.params['nj']:+.4f}  SE={fit.bse['nj']:.4f}  "
-          f"t={fit.tvalues['nj']:.3f}  p={fit.pvalues['nj']:.3f}  n={int(fit.nobs)}")
+    print(f"\nDiD regression: dlog ~ NJ")
+    print(f"  coef = {fit.params['nj']:+.4f}  SE = {fit.bse['nj']:.4f}  "
+          f"t = {fit.tvalues['nj']:.3f}  p = {fit.pvalues['nj']:.3f}  n = {int(fit.nobs)}")
 
-    # 就业变化分布图（叠加各组均值参考线与 DiD 标注）
+    # Distribution of employment changes (with group-mean reference lines and DiD label)
     fig, ax = plt.subplots(figsize=(8, 4.5))
     bins = np.linspace(d["dlog"].min() - 0.02, d["dlog"].max() + 0.02, 18)
     ax.hist(d.loc[d.nj == 1, "dlog"], bins=bins, alpha=0.55, color="tab:blue",
@@ -177,14 +184,6 @@ def main():
     ax.hist(d.loc[d.nj == 0, "dlog"], bins=bins, alpha=0.55, color="tab:orange",
             label="Pennsylvania (control)", edgecolor="white")
     ax.axvline(0, color="gray", linewidth=0.8)
-    # 各组均值参考线（虚线）
-    ax.axvline(dlog_nj, color="tab:blue", linestyle="--", linewidth=1.2)
-    ax.axvline(dlog_pa, color="tab:orange", linestyle="--", linewidth=1.2)
-    # DiD 估计量与显著性标注
-    ax.text(0.98, 0.96,
-            f"DiD = {did:+.3f}  (t = {fit.tvalues['nj']:.2f}, p = {fit.pvalues['nj']:.2f}, n = {int(fit.nobs)})",
-            transform=ax.transAxes, ha="right", va="top",
-            bbox=dict(boxstyle="round", fc="white", ec="0.8"))
     ax.set(xlabel="Log change in Eating & Drinking Places employment",
            ylabel="Number of counties",
            title="1992 change in Eating & Drinking Places employment: NJ vs PA counties (QCEW)")
@@ -192,12 +191,12 @@ def main():
     fig.tight_layout()
     fig.savefig(OUT_FIG / "extension_employment_change.png", dpi=150)
     plt.close(fig)
-    print("扩展图已保存 →", OUT_FIG / "extension_employment_change.png")
+    print("Extension figure saved ->", OUT_FIG / "extension_employment_change.png")
 
-    # 稳健性检验
+    # Robustness checks
     rob = robustness(df)
     rob.to_csv(OUT_TAB / "extension_robustness.csv")
-    print("\n稳健性检验已保存 →", OUT_TAB / "extension_robustness.csv")
+    print("\nRobustness checks saved ->", OUT_TAB / "extension_robustness.csv")
     print(rob.round(4).to_string(index=False))
 
 

@@ -1,18 +1,18 @@
-# 原始数据：按 README 中的说明自行下载，不入库
+# Raw data: download it yourself following the README; do not commit
 data/raw/
 
-# 环境变量 / 密钥
+# Environment variables / secrets
 .env
 
-# 系统与临时文件
+# System and temporary files
 .DS_Store
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
 
-# 冗余的解压数据与本地备份
+# Redundant extracted data and local backup folder
 sic.1992.q1-q4.by_area/
 备份/
 
-# 课程讲义（非项目交付物）
+# Course lecture notes (not a project deliverable)
 lecture4_git_github_extension.pdf

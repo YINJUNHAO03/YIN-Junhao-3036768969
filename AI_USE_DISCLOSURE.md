@@ -45,13 +45,21 @@ assistant) inside VSCode. Claude was used to:
    accompanied by robustness code (eastern-PA control group, full-quarter window,
    establishments outcome); Claude wrote these results into `report/report.md` §5,
    `README.md`, and the skill so they are visible to readers.
-3. **Make the extension figure clearer.** Added dashed group-mean reference lines
-   and an annotation of the DiD point estimate, t-statistic, p-value, and sample
-   size to `extension_employment_change.png`.
-4. **Correct precision in the report.** The unbalanced PA change was printed as
-   −2.16; the code computes −2.17 (raw change −2.16558). The DiD t-statistic is
-   ≈ 2.05, not the paper's ≈ 2.03 (our NJ standard error is 0.48 vs the paper's
-   0.54). A third discrepancy was added to the "Discrepancies found" note.
+3. **Extension figure.** Added dashed group-mean reference lines and a DiD
+   annotation to `extension_employment_change.png`; these were later removed so
+   the figure matches the notebook's simpler version.
+4. **Precision and the row-3 standard error.** The unbalanced PA change is −2.17
+   (the paper prints −2.16, a rounding difference). The row-3 (unbalanced)
+   standard error was re-aligned with the notebook to use the two-correlated-means
+   formula (r = 0.45), giving NJ 0.54 and t ≈ 2.03, matching the paper (an earlier
+   version used the matched-pairs SE of 0.48).
+5. **A corrected error (Table 4, column v).** Claude's edit added the `CO_OWNED`
+   dummy to the column-(v) specification, which moved the GAP coefficient from
+   the paper's 11.91 (7.39) to 11.98 (7.42). This was caught by re-checking the
+   coefficients against the published table; the specification was corrected
+   (`CO_OWNED` excluded, keeping only BK/KFC/ROY plus the four region dummies)
+   and the table regenerated.
 
-All of Claude's edits were checked by re-running `run_all.py`; no change to the
-replicated numbers was introduced.
+All of Claude's edits were checked by re-running `run_all.py`. One of them (the
+Table 4 column-(v) specification) introduced a change to a replicated number; it
+was caught and corrected before submission.
