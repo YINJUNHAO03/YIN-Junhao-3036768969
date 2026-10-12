@@ -61,6 +61,7 @@ This generates:
 - `results/tables/table4_regressions.csv` — Table 4 (reduced-form regressions)
 - `results/figures/figure1_wage_distribution.png` — Figure 1 (starting-wage distributions)
 - `results/tables/extension_did.csv` — extension DiD table
+- `results/tables/extension_robustness.csv` — extension robustness checks (alternative control group / window / outcome)
 - `results/figures/extension_employment_change.png` — extension figure
 
 No manual modification of data or code is required.
@@ -69,4 +70,4 @@ No manual modification of data or code is required.
 
 - **Table 3**: NJ wave-1 FTE ≈ 20.44, wave-2 ≈ 21.03; PA wave-1 ≈ 23.33, wave-2 ≈ 21.17; DiD ≈ +2.75 (t ≈ 2.03).
 - **Table 4**: NJ dummy ≈ 2.33 (1.19); GAP ≈ 15.65 (6.08) → 14.92 (6.21) with controls → 11.91 (7.39) with region dummies; n = 357.
-- **Extension**: county-level DiD on SIC 58 ("Eating and Drinking Places") employment ≈ +0.026 log points (t ≈ 1.30, not significant) — consistent with no adverse employment effect.
+- **Extension**: county-level DiD on SIC 58 ("Eating and Drinking Places") employment ≈ +0.026 log points (t ≈ 1.30, not significant) — consistent with no adverse employment effect. Robust to an eastern-PA control group, a full-quarter window, and an establishments-based outcome.

@@ -27,6 +27,7 @@ the outputs against the paper.
    - Table 3: NJ wave-1 FTE ≈ 20.44, wave-2 ≈ 21.03; PA wave-1 ≈ 23.33, wave-2 ≈ 21.17; DiD ≈ 2.75 (t ≈ 2.03).
    - Table 4: NJ dummy coefficient ≈ 2.33 (1.19); GAP ≈ 15.65 (6.08), with controls ≈ 14.92 (6.21), with region ≈ 11.91 (7.39); sample = 357 stores.
    - Figure 1: wave-1 wage distributions overlap across states; wave-2 NJ shifts to $5.05.
+   - Extension: county-level DiD ≈ +0.026 (t ≈ 1.30, n = 88); remains positive and insignificant across the robustness checks in `results/tables/extension_robustness.csv` (eastern-PA control group, full-quarter window, establishments outcome).
 
 4. **Report where you put each output.** Tables go to `results/tables/`, figures to `results/figures/`.
 

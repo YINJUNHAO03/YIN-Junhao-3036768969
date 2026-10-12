@@ -65,9 +65,9 @@ The two states were comparable before the increase (FTE 20.44 in NJ vs 23.33 in 
 |---|---|---|---|
 | FTE before (all available) | 23.33 | 20.44 | −2.89 |
 | FTE after (all available) | 21.17 | 21.03 | −0.14 |
-| **Change in mean FTE** | **−2.16** | **+0.59** | **+2.75** |
+| **Change in mean FTE** | **−2.17** | **+0.59** | **+2.75** |
 
-The headline DiD is **+2.75 FTE employees** (t ≈ 2.03), matching the paper's reported 2.76 (the small difference is rounding). Employment in NJ *rose* relative to PA — the opposite of the competitive prediction. The balanced-sample change (+2.75) and the specification treating temporarily-closed stores as zero (+2.51) are also reproduced exactly.
+The headline DiD is **+2.75 FTE employees** (t ≈ 2.05), matching the paper's reported 2.76 (the small difference is rounding). Employment in NJ *rose* relative to PA — the opposite of the competitive prediction. The balanced-sample change (+2.75) and the specification treating temporarily-closed stores as zero (+2.51) are also reproduced exactly.
 
 ### Table 4 — reduced-form regressions
 
@@ -85,7 +85,7 @@ All coefficients, standard errors, and the sample size (n = 357) match exactly. 
 
 The figure reproduces the paper's Figure 1: wave-1 wage distributions are nearly identical across the two states, while wave-2 NJ wages shift right and mass at $5.05, with PA unchanged.
 
-**Discrepancies found.** Two minor discrepancies were identified and are reported transparently: (i) the row-3 (unbalanced) standard error in Table 3 is 0.48 under the matched-pairs calculation vs the paper's 0.54 (the t-statistic, however, is ≈ 2.03 in both cases); (ii) the paper reports the DiD as 2.76, while the direct computation gives 2.75 (rounding). Neither affects any conclusion.
+**Discrepancies found.** Three minor discrepancies were identified and are reported transparently: (i) the row-3 (unbalanced) NJ standard error is 0.48 in our matched-pairs calculation versus the paper's 0.54, so our t-statistic is ≈ 2.05 versus the paper's ≈ 2.03; (ii) the unbalanced PA change is −2.17 (the raw change is −2.16558), while the paper prints −2.16; (iii) the paper reports the DiD as 2.76, while the direct computation gives 2.75 (rounding). None of these affects any conclusion.
 
 ## 5. Independent extension
 
@@ -109,6 +109,17 @@ Results:
 
 The DiD estimate is **+0.026 log points** (SE 0.020, t = 1.30, p = 0.20), i.e., NJ eating-and-drinking employment grew about 2.6 percentage points faster than PA, but the difference is statistically insignificant. The sign is consistent with Card and Krueger's conclusion of **no adverse employment effect**.
 
+**Robustness checks.** The estimate is stable across three alternative specifications:
+
+| Specification | DiD (SE) | t | n |
+|---|---|---|---|
+| Main: employment, Feb–Mar vs Nov–Dec, all PA counties | +0.026 (0.020) | 1.30 | 88 |
+| Control group = 7 eastern-PA counties in the CK survey | +0.029 (0.031) | 0.93 | 28 |
+| Full-quarter window (Q1 vs Q4 averages) | +0.029 (0.020) | 1.43 | 88 |
+| Outcome = number of establishments | −0.001 (0.011) | −0.09 | 88 |
+
+The employment-based DiD is positive but insignificant in every specification, and the establishments-based estimate is essentially exactly zero — all consistent with no adverse employment effect.
+
 A notable finding: the administrative data show **Pennsylvania employment rising** (+4.6%), whereas Card and Krueger's survey showed PA *falling* (−2.16 FTE). This echoes the authors' own 1998 NBER re-analysis using confidential ES-202 micro data, which attributed the survey's PA decline to sample/measurement issues. The public QCEW extension independently reproduces that point.
 
 ## 6. Validation, limitations, and conclusion
@@ -117,7 +128,7 @@ A notable finding: the administrative data show **Pennsylvania employment rising
 
 - Every replicated number was checked against the published tables and against the `check.sas` program distributed with the data.
 - The workflow is fully automated (`python code/run_all.py`) and regenerates all tables and figures from `data/raw/` without manual modification.
-- The extension was verified by inspecting the four DiD cells and the regression output.
+- The extension was verified by inspecting the four DiD cells, the regression output, and the robustness checks in §5.
 
 ### Limitations
 
