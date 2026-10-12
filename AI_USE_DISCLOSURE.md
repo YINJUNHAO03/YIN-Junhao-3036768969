@@ -33,3 +33,25 @@ This project used an AI coding assistant (Trae) throughout the workflow. This do
 5. **Rejected suggestion.** The assistant suggested re-using the paper's own Table 5 robustness checks as the "independent extension." This was rejected because it is already in the paper; the QCEW county-level analysis was chosen instead as a genuinely new analysis.
 
 All code was run end-to-end and the outputs were inspected before being committed.
+
+## Post-submission review and edits (Claude)
+
+The project was subsequently reviewed and edited with Claude (Anthropic's coding
+assistant) inside VSCode. Claude was used to:
+
+1. **Run the workflow end-to-end.** `python code/run_all.py` was executed against
+   `data/raw/` and every table and figure regenerated without manual changes.
+2. **Surface the extension robustness checks.** The county-level DiD was already
+   accompanied by robustness code (eastern-PA control group, full-quarter window,
+   establishments outcome); Claude wrote these results into `report/report.md` §5,
+   `README.md`, and the skill so they are visible to readers.
+3. **Make the extension figure clearer.** Added dashed group-mean reference lines
+   and an annotation of the DiD point estimate, t-statistic, p-value, and sample
+   size to `extension_employment_change.png`.
+4. **Correct precision in the report.** The unbalanced PA change was printed as
+   −2.16; the code computes −2.17 (raw change −2.16558). The DiD t-statistic is
+   ≈ 2.05, not the paper's ≈ 2.03 (our NJ standard error is 0.48 vs the paper's
+   0.54). A third discrepancy was added to the "Discrepancies found" note.
+
+All of Claude's edits were checked by re-running `run_all.py`; no change to the
+replicated numbers was introduced.
