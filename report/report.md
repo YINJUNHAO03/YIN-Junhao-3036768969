@@ -57,31 +57,71 @@ All main results are reproduced to the paper's reported precision.
 
 ### Table 2 — variable means by state
 
+**Store composition** (percentage of stores):
+
+| Chain | NJ | PA |
+|---|---|---|
+| Burger King | 41.09 | 44.30 |
+| KFC | 20.54 | 15.19 |
+| Roy Rogers | 24.77 | 21.52 |
+| Wendy's | 13.60 | 18.99 |
+| Company owned | 34.14 | 35.44 |
+
+**Wave 1 (February–March 1992, before the increase)** — mean (standard error):
+
+| Variable | NJ | PA | t-statistic |
+|---|---|---|---|
+| FTE employment | 20.44 (0.51) | 23.33 (1.35) | -2.0 |
+| Percentage full-time employees | 32.85 (1.33) | 35.04 (2.73) | -0.72 |
+| Starting wage | 4.61 (0.02) | 4.63 (0.04) | -0.4 |
+| Wage = $4.25 (%) | 30.51 (2.53) | 32.91 (5.32) | -0.41 |
+| Price of full meal | 3.35 (0.04) | 3.04 (0.07) | 3.96 |
+| Hours open (weekday) | 14.42 (0.15) | 14.53 (0.33) | -0.29 |
+| Recruiting bonus (%) | 23.56 (2.34) | 29.11 (5.14) | -0.98 |
+
+**Wave 2 (November–December 1992, after the increase)** — mean (standard error):
+
+| Variable | NJ | PA | t-statistic |
+|---|---|---|---|
+| FTE employment | 21.03 (0.52) | 21.17 (0.94) | -0.13 |
+| Percentage full-time employees | 35.87 (1.38) | 30.38 (2.81) | 1.75 |
+| Starting wage | 5.08 (0.01) | 4.62 (0.04) | 10.82 |
+| Wage = $4.25 (%) | 0.00 (0.00) | 25.32 (4.92) | — |
+| Wage = $5.05 (%) | 85.20 (1.95) | 1.27 (1.27) | 36.04 |
+| Price of full meal | 3.41 (0.04) | 3.03 (0.07) | 5.08 |
+| Hours open (weekday) | 14.42 (0.15) | 14.65 (0.33) | -0.65 |
+| Recruiting bonus (%) | 20.32 (2.27) | 23.38 (4.85) | -0.57 |
+
 The two states were comparable before the increase (FTE 20.44 in NJ vs 23.33 in PA; starting wage 4.61 vs 4.63). After the increase, NJ starting wages rose to 5.08 while PA stayed at 4.62, confirming that the policy "bit" in NJ but not PA.
 
 ### Table 3 — average FTE employment and the DiD
 
-| | PA | NJ | NJ − PA |
-|---|---|---|---|
-| FTE before (all available) | 23.33 | 20.44 | −2.89 |
-| FTE after (all available) | 21.17 | 21.03 | −0.14 |
-| **Change in mean FTE** | **−2.17** | **+0.59** | **+2.75** |
+| | PA | NJ | NJ − PA | NJ low ($4.25) | NJ mid ($4.26–4.99) | NJ high (≥$5.00) | Low − High | Mid − High |
+|---|---|---|---|---|---|---|---|---|
+| 1. FTE, wave 1 | 23.33 (1.35) | 20.44 (0.51) | -2.89 (1.44) | 19.56 (0.77) | 20.08 (0.84) | 22.25 (1.14) | -2.69 (1.37) | -2.17 (1.41) |
+| 2. FTE, wave 2 | 21.17 (0.94) | 21.03 (0.52) | -0.14 (1.08) | 20.88 (1.01) | 20.96 (0.76) | 20.21 (1.03) | 0.66 (1.44) | 0.74 (1.27) |
+| 3. Change (unbalanced) | -2.17 (1.25) | 0.59 (0.54) | **2.75 (1.36)** | 1.32 (0.95) | 0.87 (0.84) | -2.04 (1.14) | 3.36 (1.48) | 2.91 (1.41) |
+| 4. Change (balanced) | -2.28 (1.25) | 0.47 (0.48) | 2.75 (1.34) | 1.20 (0.82) | 0.71 (0.69) | -2.16 (1.01) | 3.36 (1.30) | 2.87 (1.22) |
+| 5. Change (temporarily closed = 0) | -2.28 (1.25) | 0.23 (0.49) | 2.51 (1.35) | 0.90 (0.87) | 0.49 (0.69) | -2.39 (1.02) | 3.29 (1.34) | 2.88 (1.23) |
 
 The headline DiD is **+2.75 FTE employees** (t ≈ 2.03), matching the paper's reported 2.76 (the small difference is rounding). Employment in NJ *rose* relative to PA — the opposite of the competitive prediction. The balanced-sample change (+2.75) and the specification treating temporarily-closed stores as zero (+2.51) are also reproduced exactly.
 
 ### Table 4 — reduced-form regressions
 
-| Model | Coefficient (SE) | Paper |
-|---|---|---|
-| (i) NJ dummy | 2.33 (1.19) | 2.33 (1.19) |
-| (ii) NJ + chain/ownership | 2.30 (1.20) | 2.30 (1.20) |
-| (iii) GAP | 15.65 (6.08) | 15.65 (6.08) |
-| (iv) GAP + chain/ownership | 14.92 (6.21) | 14.92 (6.21) |
-| (v) GAP + chain + region | 11.91 (7.39) | 11.91 (7.39) |
+| Independent variable | (i) | (ii) | (iii) | (iv) | (v) |
+|---|---|---|---|---|---|
+| New Jersey dummy | 2.33 (1.19) | 2.30 (1.20) | — | — | — |
+| Initial wage gap | — | — | 15.65 (6.08) | 14.92 (6.21) | 11.91 (7.39) |
+| Controls for chain and ownership | no | yes | no | yes | yes |
+| Controls for region | no | no | no | no | yes |
+| Standard error of regression | 8.79 | 8.78 | 8.76 | 8.76 | 8.74 |
+| Probability value for controls | — | 0.34 | — | 0.44 | 0.31 |
 
 All coefficients, standard errors, and the sample size (n = 357) match exactly. Note that column (v) reproduces the paper only when the region controls are `CENTRALJ + SOUTHJ + PA1 + PA2` (two NJ regions and two PA regions, excluding `CO_OWNED`), consistent with the paper's footnote.
 
 ### Figure 1 — starting-wage distributions
+
+![Figure 1: distribution of starting wages by state and wave](../results/figures/figure1_wage_distribution.png)
 
 The figure reproduces the paper's Figure 1: wave-1 wage distributions are nearly identical across the two states, while wave-2 NJ wages shift right and mass at $5.05, with PA unchanged.
 
